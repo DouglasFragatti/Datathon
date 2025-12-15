@@ -9,11 +9,11 @@ env/
 .env
 
 # Data and Models
-data/
-app/model/
-*.pkl
-*.joblib
-logs/
+# data/ (User requested to include)
+# app/model/ (Included)
+# *.pkl (Included)
+# *.joblib (Included)
+# logs/ (Included)
 
 # IDE
 .vscode/
