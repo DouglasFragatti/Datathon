@@ -61,6 +61,15 @@
    docker run -p 8000:8000 passos-magicos-ml
    ```
 
+### Interface Visual (Streamlit)
+Para abrir o Dashboard interativo (Simulador + Explorador de Dados):
+1. Garanta que a API esteja rodando (`uvicorn app.main:app`).
+2. Em outro terminal, execute:
+   ```bash
+   streamlit run frontend/app.py
+   ```
+   O navegador abrirá automaticamente em [http://localhost:8501](http://localhost:8501).
+
 ## 4) Exemplos de Chamadas à API
 
 **Endpoint**: `POST /predict`

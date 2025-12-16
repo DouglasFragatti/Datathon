@@ -10,3 +10,5 @@ seaborn
 jupyter
 xgboost
 openpyxl
+streamlit
+requests

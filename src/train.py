@@ -34,7 +34,7 @@ def train_model(data_path: str, model_path: str):
     pipeline = Pipeline(steps=[
         ('feature_engineering', FeatureEngineer()),
         ('preprocessor', get_preprocessor()),
-        ('classifier', RandomForestClassifier(n_estimators=100, random_state=42))
+        ('classifier', RandomForestClassifier(n_estimators=300, class_weight='balanced', random_state=42))
     ])
     
     print("Training model...")
