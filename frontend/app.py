@@ -18,7 +18,7 @@ utilizando o modelo de Machine Learning treinado.
 """)
 
 # Tabs
-tab1, tab2 = st.tabs(["📊 Explorador de Dados", "🚀 Simulador de Predição"])
+tab1, tab2, tab3 = st.tabs(["📊 Explorador de Dados", "🚀 Simulador de Predição", "📈 Monitoramento"])
 
 # --- Tab 1: Data Explorer ---
 with tab1:
@@ -121,3 +121,48 @@ with tab2:
                 
         except Exception as e:
             st.error(f"Falha na conexão com a API. Verifique se o backend está rodando. Erro: {e}")
+
+# --- Tab 3: Monitoring ---
+with tab3:
+    st.header("📈 Monitoramento de Drift (Real-Time)")
+    
+    log_file = "logs/predictions.jsonl"
+    
+    try:
+        data = []
+        with open(log_file, 'r') as f:
+            for line in f:
+                data.append(json.loads(line))
+                
+        if data:
+            df_logs = pd.json_normalize(data)
+            df_logs['timestamp'] = pd.to_datetime(df_logs['timestamp'])
+            
+            st.metric("Total de Predições", len(df_logs))
+            
+            # Layout
+            col_m1, col_m2 = st.columns(2)
+            
+            with col_m1:
+                st.subheader("Distribuição de Predições")
+                pred_counts = df_logs['output.prediction'].value_counts()
+                st.bar_chart(pred_counts)
+                
+            with col_m2:
+                st.subheader("Confiança Média ao Longo do Tempo")
+                if 'timestamp' in df_logs.columns and 'output.confidence' in df_logs.columns:
+                    st.line_chart(df_logs.set_index('timestamp')['output.confidence'])
+            
+            # Input Drift Table
+            st.subheader("Estatísticas de Input (Drift)")
+            input_cols = [c for c in df_logs.columns if 'inputs.' in c]
+            if input_cols:
+                st.dataframe(df_logs[input_cols].describe().T)
+                
+        else:
+            st.warning("O arquivo de logs está vazio.")
+            
+    except FileNotFoundError:
+        st.warning("Nenhum log encontrado. Realize algumas predições primeiro!")
+    except Exception as e:
+        st.error(f"Erro ao ler logs: {e}")
