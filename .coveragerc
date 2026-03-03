@@ -1,0 +1,6 @@
+[run]
+omit =
+    src/check_cross.py
+    src/check_target.py
+    src/check_target_2.py
+    src/inspect_data.py
